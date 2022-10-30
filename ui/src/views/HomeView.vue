@@ -1,65 +1,116 @@
 <template>
-  <!-- Create a navbar with a logo in the left and logout in the right -->
-  <v-app-bar app color="primary" dark>
-    <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-    <v-toolbar-title>My App</v-toolbar-title>
-    <v-spacer></v-spacer>
-    <v-btn icon @click="logout">
-      <v-icon>mdi-logout</v-icon>
-    </v-btn>
-  </v-app-bar>
-  <!-- Create a drawer with a list of links -->
-  <v-navigation-drawer v-model="drawer" app>
-    <v-list dense>
-      <v-list-item link>
-        <v-list-item-icon>
-          <v-icon>mdi-home</v-icon>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title>Home</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-      <v-list-item link>
-        <v-list-item-icon>
-          <v-icon>mdi-account</v-icon>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title>Profile</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-      <v-list-item link>
-        <v-list-item-icon>
-          <v-icon>mdi-calendar</v-icon>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title>Events</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-      <v-list-item link>
-        <v-list-item-icon>
-          <v-icon>mdi-calendar-plus</v-icon>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title>Create new event</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
-    </v-list>
-  </v-navigation-drawer>
+    <Navbar />
+  <v-main>
+    <h1 style="margin-left: 20px">Explore Other Parties</h1>
+    <v-carousel
+      continuous cycle dark hide-delimiters show-arrows-on-hover height="400" style="margin: 20px"
+    >
+      <template v-for="(item, index) in items">
+        <v-carousel-item
+          v-if="(index + 1) % columns === 1 || columns === 1" 
+          :key="index"
+        >
+          <v-row class="flex-nowrap fill-height" justify="center">
+            <template v-for="(n,i) in columns">
+              <template v-if="(+index + i) < items.length">
+                <v-col :key="i" justify="center">
+                    <v-card height="100%" class="d-flex flex-column">
+                      <v-card-title>{{ items[+index + i].title }}</v-card-title>
+                      <v-card-text>{{ items[+index + i].text }}</v-card-text>
+                      <v-spacer></v-spacer>
+                      <v-card-action>
+                        <v-btn style="float:left; margin-left: 10px; margin-bottom: 10px" color="green" @click="join(items[+index + i].id)">Join</v-btn>
+                        <v-btn style="float:right; margin-right: 10px; margin-bottom: 10px" color="blue" @click="info(items[+index + i].id)">See more info</v-btn>
+                      </v-card-action>
+                    </v-card>
+                </v-col>
+              </template>
+            </template>
+          </v-row>
+        </v-carousel-item>
+      </template>
+    </v-carousel>
+    <h1 style="margin-left: 20px">My Upcoming Parties</h1>
+    <v-carousel
+      continuous cycle dark hide-delimiters show-arrows-on-hover height="400" style="margin: 20px"
+    >
+      <template v-for="(item, index) in items">
+        <v-carousel-item
+          v-if="(index + 1) % columns === 1 || columns === 1" 
+          :key="index"
+        >
+          <v-row class="flex-nowrap fill-height" justify="center">
+            <template v-for="(n,i) in columns">
+              <template v-if="(+index + i) < items.length">
+                <v-col :key="i" justify="center">
+                    <v-card height="100%" class="d-flex flex-column">
+                      <v-card-title>{{ items[+index + i].title }}</v-card-title>
+                      <v-card-text>{{ items[+index + i].text }}</v-card-text>
+                      <v-spacer></v-spacer>
+                      <v-card-action>
+                        <v-btn style="float:left; margin-left: 10px; margin-bottom: 10px" color="red" @click="join(items[+index + i].id)">Leave</v-btn>
+                        <v-btn style="float:right; margin-right: 10px; margin-bottom: 10px" color="blue" @click="info(items[+index + i].id)">See more info</v-btn>
+                      </v-card-action>
+                    </v-card>
+                </v-col>
+              </template>
+            </template>
+          </v-row>
+        </v-carousel-item>
+      </template>
+    </v-carousel>
+  </v-main>
 </template>
 
 <script>
 import { defineComponent } from 'vue';
+import Navbar from '../components/Navbar.vue';
 
 export default defineComponent({
   name: 'HomeView',
   data: () => ({
     drawer: false,
+    items: [
+      {
+        id: 1,
+        title: 'Welcome to My App',
+        text: 'This is a sample app to show how to use Vuetify with Vue 3',
+      },
+      {
+        id: 2,
+        title: 'Vuetify',
+        text: 'Vuetify is a Vue UI Library with beautifully handcrafted Material Components',
+      },
+      {
+        id: 3,
+        title: 'Vue 3',
+        text: 'Vue 3 is the next version of Vue.js',
+      },
+      {
+        id: 4,
+        title: 'Vue 3',
+        text: 'Vue 3 is the next version of Vue.js',
+      },
+      {
+        id: 5,
+        title: 'Vue 3',
+        text: 'Vue 3 is the next version of Vue.js',
+      },
+    ],
+    colors: ['primary', 'secondary', 'success', 'info'],
+    columns: 3,
   }),
   methods: {
     logout() {
       //this.$store.dispatch('userStore/logout', null, { root: true });
       this.$router.push("/login");
     },
+    info(id) {
+      this.$router.push("/party/" + id);
+    }
+  },
+  components: {
+    Navbar,
   },
 
 });
