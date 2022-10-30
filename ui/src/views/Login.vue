@@ -57,7 +57,9 @@ export default defineComponent({
   methods: {
     login() {
       if (this.$refs.form.validate()) {
-        this.$store.dispatch('userStore/login', { email: this.email, password: this.password }, { root: true });
+        //if(this.$store.dispatch('userStore/login', { email: this.email, password: this.password }, { root: true })) {
+          this.$router.push("/dashboard");
+        //}
       }
     },
     register() {

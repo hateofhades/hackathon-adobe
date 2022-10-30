@@ -26,9 +26,13 @@ export default function userStore() {
                 });
                 const user = await response.json();
                 storeParam.commit("user", user);
+
+                return true;
             },
             async logout(storeParam) {
                 storeParam.commit("user", null);
+
+                return true;
             },
             async register(storeParam, { username, password }) {
                 const response = await fetch(`${storeParam.rootState.API_URL}/api/register`, {
@@ -40,6 +44,8 @@ export default function userStore() {
                 });
                 const user = await response.json();
                 storeParam.commit("user", user);
+
+                return true;
             }
         }
     };
